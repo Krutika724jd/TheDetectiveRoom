@@ -1,6 +1,7 @@
 import { Search, FileText, ArrowRight, Play, Fingerprint } from "lucide-react";
 import FeaturedCases from "./assets/components/cases/FeaturedCases";
 import HowToPlay from "./common/HowToPlay";
+import Footer from "./assets/components/layout/Footer";
 
 function App() {
   return (
@@ -124,9 +125,10 @@ function App() {
 
       {/* Featured Mysteries */}
       <FeaturedCases />
-      
+
       {/* How to Play */}
       <HowToPlay />
+      <Footer/>
     </main>
   );
 }
