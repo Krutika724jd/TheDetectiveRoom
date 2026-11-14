@@ -1,16 +1,10 @@
-
 import { useState } from "react";
-import {
-  Search,
-  LockKeyhole,
-  CheckCircle2,
-  FileSearch,
-} from "lucide-react";
+import { Search, CheckCircle2, FileSearch, BookOpen, X } from "lucide-react";
 import { missingNecklaceClues } from "../../../data/cases/missingNecklaceClues";
 
 function ClueInvestigation() {
   const [discoveredClues, setDiscoveredClues] = useState<number[]>([]);
-
+  const [isNotebookOpen, setIsNotebookOpen] = useState(false);
   const totalClues = missingNecklaceClues.length;
   const progress = (discoveredClues.length / totalClues) * 100;
 
@@ -33,17 +27,15 @@ function ClueInvestigation() {
         </h2>
 
         <p className="mt-3 max-w-2xl text-sm leading-7 text-gray-400">
-          Examine the available evidence carefully. Every discovery
-          could bring you closer to uncovering the truth.
+          Examine the available evidence carefully. Every discovery could bring
+          you closer to uncovering the truth.
         </p>
       </div>
 
       {/* Investigation Progress */}
       <div className="mb-8 border border-white/10 bg-[#1C1E23] p-6">
         <div className="mb-3 flex items-center justify-between">
-          <span className="text-sm text-gray-300">
-            Investigation Progress
-          </span>
+          <span className="text-sm text-gray-300">Investigation Progress</span>
 
           <span className="text-sm font-semibold text-[#C49A52]">
             {discoveredClues.length} / {totalClues} clues discovered
@@ -57,7 +49,75 @@ function ClueInvestigation() {
           />
         </div>
       </div>
+      <button
+        type="button"
+        onClick={() => setIsNotebookOpen((previous) => !previous)}
+        className="mt-5 flex items-center gap-3 border border-[#C49A52]/40 px-5 py-3 text-sm text-[#C49A52] transition hover:bg-[#C49A52] hover:text-black"
+      >
+        {isNotebookOpen ? <X size={17} /> : <BookOpen size={17} />}
 
+        {isNotebookOpen ? "Close Evidence Notebook" : "Open Evidence Notebook"}
+      </button>
+      {isNotebookOpen && (
+        <div className="animate-evidence-reveal mt-6 border border-[#C49A52]/30 bg-[#1C1E23] p-6">
+          <div className="mb-6 flex items-center justify-between border-b border-white/10 pb-5">
+            <div>
+              <p className="text-xs tracking-[3px] text-[#C49A52]">
+                INVESTIGATION RECORD
+              </p>
+
+              <h3 className="mt-2 font-serif text-2xl text-[#F5F1E8]">
+                Evidence Notebook
+              </h3>
+            </div>
+
+            <BookOpen size={28} className="text-[#C49A52]" />
+          </div>
+
+          <p className="mb-5 text-sm text-gray-400">
+            Your investigation notes and discovered evidence are collected here.
+          </p>
+
+          {discoveredClues.length === 0 ? (
+            <p className="border border-white/10 bg-[#25262A] p-5 text-sm text-gray-400">
+              No evidence collected yet. Investigate your first clue to start
+              building your case.
+            </p>
+          ) : (
+            <div className="space-y-5">
+              {missingNecklaceClues
+                .filter((clue) => discoveredClues.includes(clue.id))
+                .map((clue) => (
+                  <div
+                    key={clue.id}
+                    className="border-l-2 border-[#C49A52] bg-[#25262A] p-5"
+                  >
+                    <p className="text-xs tracking-widest text-[#C49A52]">
+                      CLUE 0{clue.sequence}
+                    </p>
+
+                    <h4 className="mt-2 font-serif text-xl text-[#F5F1E8]">
+                      {clue.title}
+                    </h4>
+
+                    <p className="mt-3 text-sm leading-7 text-gray-400">
+                      {clue.evidence}
+                    </p>
+                  </div>
+                ))}
+            </div>
+          )}
+
+          <div className="mt-6 border-t border-white/10 pt-5">
+            <p className="text-sm text-gray-300">
+              Evidence collected:{" "}
+              <span className="font-semibold text-[#C49A52]">
+                {discoveredClues.length} / {totalClues}
+              </span>
+            </p>
+          </div>
+        </div>
+      )}
       {/* Discovered Clues */}
       <div className="space-y-5">
         {missingNecklaceClues
@@ -77,9 +137,7 @@ function ClueInvestigation() {
                     {clue.title}
                   </h3>
 
-                  <p className="mt-1 text-xs text-gray-500">
-                    {clue.category}
-                  </p>
+                  <p className="mt-1 text-xs text-gray-500">{clue.category}</p>
                 </div>
 
                 <CheckCircle2 className="text-emerald-400" size={24} />
@@ -141,18 +199,15 @@ function ClueInvestigation() {
         {/* All Clues Discovered */}
         {!nextClue && (
           <div className="border border-emerald-500/30 bg-[#1C1E23] p-6 text-center">
-            <CheckCircle2
-              size={36}
-              className="mx-auto text-emerald-400"
-            />
+            <CheckCircle2 size={36} className="mx-auto text-emerald-400" />
 
             <h3 className="mt-4 font-serif text-2xl text-[#F5F1E8]">
               All Clues Discovered
             </h3>
 
             <p className="mt-2 text-sm text-gray-400">
-              You've examined all available evidence. Review your
-              findings before making an accusation.
+              You've examined all available evidence. Review your findings
+              before making an accusation.
             </p>
           </div>
         )}
