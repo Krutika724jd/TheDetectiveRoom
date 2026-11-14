@@ -6,6 +6,7 @@ import {
   Play,
   Fingerprint,
 } from "lucide-react";
+import FeaturedCases from "./assets/components/cases/FeaturedCases";
 
 function App() {
   return (
@@ -142,20 +143,7 @@ function App() {
         </div>
       </section>
 
-      {/* Temporary Homepage Placeholder */}
-      <section id="cases" className="mx-auto max-w-7xl px-6 py-20">
-        <p className="text-center text-xs tracking-[4px] text-[#C49A52]">
-          THE INVESTIGATION BEGINS
-        </p>
-
-        <h2 className="mt-4 text-center font-serif text-3xl">
-          Choose Your Mystery
-        </h2>
-
-        <p className="mt-4 text-center text-gray-400">
-          Your first case is waiting to be solved.
-        </p>
-      </section>
+      <FeaturedCases />
 
     </main>
   );
