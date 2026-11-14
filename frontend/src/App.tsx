@@ -1,21 +1,13 @@
-
-import {
-  Search,
-  FileText,
-  ArrowRight,
-  Play,
-  Fingerprint,
-} from "lucide-react";
+import { Search, FileText, ArrowRight, Play, Fingerprint } from "lucide-react";
 import FeaturedCases from "./assets/components/cases/FeaturedCases";
+import HowToPlay from "./common/HowToPlay";
 
 function App() {
   return (
     <main className="min-h-screen bg-[#101114] text-[#F5F1E8]">
-
       {/* Navigation */}
       <nav className="border-b border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
-
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[#C49A52]">
               <Fingerprint className="text-[#C49A52]" size={22} />
@@ -47,17 +39,14 @@ function App() {
             <Search size={16} />
             Investigate
           </button>
-
         </div>
       </nav>
 
       {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-white/10">
-
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(196,154,82,0.12),_transparent_65%)]" />
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-28 md:grid-cols-2">
-
           <div>
             <p className="mb-6 text-xs font-semibold tracking-[5px] text-[#C49A52]">
               YOUR INVESTIGATION STARTS HERE
@@ -65,19 +54,16 @@ function App() {
 
             <h2 className="max-w-xl font-serif text-5xl leading-tight md:text-7xl">
               Every clue tells a story.
-              <span className="mt-2 block text-[#C49A52]">
-                Find the truth.
-              </span>
+              <span className="mt-2 block text-[#C49A52]">Find the truth.</span>
             </h2>
 
             <p className="mt-7 max-w-lg leading-8 text-gray-400">
-              Step into the world of mysteries. Examine evidence,
-              question suspects, connect the clues and solve the
-              cases that others cannot.
+              Step into the world of mysteries. Examine evidence, question
+              suspects, connect the clues and solve the cases that others
+              cannot.
             </p>
 
             <div className="mt-9 flex flex-wrap gap-4">
-
               <button className="flex items-center gap-3 bg-[#C49A52] px-7 py-4 font-semibold text-black transition hover:bg-[#d8b36f]">
                 <Search size={18} />
                 Start Investigating
@@ -88,7 +74,6 @@ function App() {
                 <Play size={17} />
                 How It Works
               </button>
-
             </div>
 
             <p className="mt-6 text-xs tracking-wide text-gray-500">
@@ -98,11 +83,9 @@ function App() {
 
           {/* Decorative Investigation Card */}
           <div className="relative mx-auto w-full max-w-md">
-
             <div className="absolute -inset-5 rounded-full bg-[#C49A52]/10 blur-3xl" />
 
             <div className="relative rotate-2 border border-[#C49A52]/30 bg-[#1C1E23] p-8 shadow-2xl">
-
               <div className="flex items-center justify-between border-b border-white/10 pb-5">
                 <span className="text-xs tracking-[3px] text-[#C49A52]">
                   CLASSIFIED FILE
@@ -117,9 +100,7 @@ function App() {
                   className="mx-auto text-[#C49A52]/80"
                 />
 
-                <h3 className="mt-8 font-serif text-3xl">
-                  THE UNKNOWN
-                </h3>
+                <h3 className="mt-8 font-serif text-3xl">THE UNKNOWN</h3>
 
                 <p className="mt-3 text-sm tracking-widest text-gray-500">
                   CASE NO. 001
@@ -136,15 +117,16 @@ function App() {
                 <span>INVESTIGATION DIVISION</span>
                 <span>TOP SECRET</span>
               </div>
-
             </div>
           </div>
-
         </div>
       </section>
 
+      {/* Featured Mysteries */}
       <FeaturedCases />
-
+      
+      {/* How to Play */}
+      <HowToPlay />
     </main>
   );
 }
