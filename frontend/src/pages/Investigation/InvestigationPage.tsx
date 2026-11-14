@@ -1,5 +1,6 @@
 import { ArrowLeft, FileText, Clock, Search, LockKeyhole } from "lucide-react";
 import SuspectsSection from "../../assets/components/cases/SuspectsSection";
+import ClueInvestigation from "../../assets/components/cases/ClueInvestigation";
 function InvestigationPage() {
   return (
     <main className="min-h-screen bg-[#101114] text-[#F5F1E8]">
@@ -114,6 +115,7 @@ function InvestigationPage() {
         </div>
       </section>
       <SuspectsSection />
+      <ClueInvestigation />
     </main>
   );
 }
