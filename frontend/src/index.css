@@ -22,3 +22,21 @@ body {
   min-height: 100vh;
   background: #101114;
 }
+
+@keyframes evidenceReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-evidence-reveal {
+  animation: evidenceReveal 500ms ease-out both;
+}

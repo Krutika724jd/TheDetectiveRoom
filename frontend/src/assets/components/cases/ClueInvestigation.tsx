@@ -89,7 +89,7 @@ function ClueInvestigation() {
                 {clue.description}
               </p>
 
-              <div className="mt-5 border-l-2 border-[#C49A52] bg-[#25262A] p-5">
+              <div className="animate-evidence-reveal mt-5 border-l-2 border-[#C49A52] bg-[#25262A] p-5">
                 <p className="flex items-center gap-2 text-xs font-semibold tracking-widest text-[#C49A52]">
                   <FileSearch size={15} />
                   EVIDENCE DISCOVERED
