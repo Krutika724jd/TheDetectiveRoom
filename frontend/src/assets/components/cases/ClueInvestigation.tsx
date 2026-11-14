@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Search, CheckCircle2, FileSearch, BookOpen, X } from "lucide-react";
 import { missingNecklaceClues } from "../../../data/cases/missingNecklaceClues";
+import SuspectEvidenceComparison from "./SuspectEvidenceComparison";
 
 function ClueInvestigation() {
   const [discoveredClues, setDiscoveredClues] = useState<number[]>([]);
@@ -212,6 +213,7 @@ function ClueInvestigation() {
           </div>
         )}
       </div>
+      <SuspectEvidenceComparison discoveredClues={discoveredClues} />
     </section>
   );
 }
