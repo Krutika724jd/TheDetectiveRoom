@@ -1,16 +1,15 @@
-
 import { useState } from "react";
 import { Fingerprint, Send, CheckCircle2 } from "lucide-react";
-
+import CaseVerdict from "./CaseVerdict";
 import { missingNecklaceSuspects } from "../../../data/cases/missingNecklace";
 
 function AccusationSection() {
   const [selectedSuspectId, setSelectedSuspectId] = useState("");
   const [reasoning, setReasoning] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-
+  const [showVerdict, setShowVerdict] = useState(false);
   const selectedSuspect = missingNecklaceSuspects.find(
-    (suspect) => suspect.id === Number(selectedSuspectId)
+    (suspect) => suspect.id === Number(selectedSuspectId),
   );
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -35,17 +34,14 @@ function AccusationSection() {
         </h2>
 
         <p className="mt-3 max-w-2xl text-sm leading-7 text-gray-400">
-          You've examined the suspects and collected the evidence.
-          Now decide who you believe is responsible for the missing necklace.
+          You've examined the suspects and collected the evidence. Now decide
+          who you believe is responsible for the missing necklace.
         </p>
       </div>
 
       {isSubmitted ? (
         <div className="border border-[#C49A52]/30 bg-[#1C1E23] p-8">
-          <CheckCircle2
-            size={40}
-            className="text-[#C49A52]"
-          />
+          <CheckCircle2 size={40} className="text-[#C49A52]" />
 
           <h3 className="mt-5 font-serif text-2xl text-[#F5F1E8]">
             Accusation Submitted
@@ -70,9 +66,22 @@ function AccusationSection() {
           </div>
 
           <p className="mt-6 text-sm text-gray-500">
-            Your accusation has been recorded. The case verdict
-            will reveal what really happened.
+            Your accusation has been recorded. Are you ready to discover the
+            truth?
           </p>
+
+          <button
+            type="button"
+            onClick={() => setShowVerdict(true)}
+            className="mt-7 flex items-center justify-center gap-3 bg-[#C49A52] px-7 py-4 text-xs font-bold tracking-widest text-[#101114] transition hover:bg-[#D6AD68]"
+          >
+            REVEAL CASE VERDICT
+            <Fingerprint size={16} />
+          </button>
+
+          {showVerdict && (
+            <CaseVerdict accusedSuspectId={Number(selectedSuspectId)} />
+          )}
         </div>
       ) : (
         <form
@@ -88,17 +97,12 @@ function AccusationSection() {
             </label>
 
             <div className="flex items-center gap-3 border border-white/10 bg-[#25262A] px-4">
-              <Fingerprint
-                size={20}
-                className="shrink-0 text-[#C49A52]"
-              />
+              <Fingerprint size={20} className="shrink-0 text-[#C49A52]" />
 
               <select
                 id="accused-suspect"
                 value={selectedSuspectId}
-                onChange={(event) =>
-                  setSelectedSuspectId(event.target.value)
-                }
+                onChange={(event) => setSelectedSuspectId(event.target.value)}
                 required
                 className="w-full bg-transparent py-4 text-sm text-[#F5F1E8] outline-none"
               >
