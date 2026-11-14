@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { Fingerprint, Search, FileSearch } from "lucide-react";
-
+import { missingNecklaceAnalysis } from "../../../data/cases/missingNecklaceAnalysis";
 import { missingNecklaceSuspects } from "../../../data/cases/missingNecklace";
 import { missingNecklaceClues } from "../../../data/cases/missingNecklaceClues";
 
@@ -15,13 +14,30 @@ function SuspectEvidenceComparison({
   const [selectedSuspectId, setSelectedSuspectId] = useState(1);
 
   const selectedSuspect = missingNecklaceSuspects.find(
-    (suspect) => suspect.id === selectedSuspectId
+    (suspect) => suspect.id === selectedSuspectId,
   );
 
   const discoveredEvidence = missingNecklaceClues.filter((clue) =>
-    discoveredClues.includes(clue.id)
+    discoveredClues.includes(clue.id),
+  );
+  const selectedAnalysis = missingNecklaceAnalysis.find(
+    (analysis) => analysis.suspectId === selectedSuspectId,
   );
 
+  const suspectEvidence = discoveredEvidence.map((clue) => {
+    const analysis = selectedAnalysis?.evidence.find(
+      (item) => item.clueId === clue.id,
+    );
+
+    return {
+      ...clue,
+      analysis: analysis ?? {
+        type: "observation" as const,
+        explanation:
+          "This clue has not established a direct connection to this suspect yet.",
+      },
+    };
+  });
   if (!selectedSuspect) return null;
 
   return (
@@ -37,8 +53,8 @@ function SuspectEvidenceComparison({
         </h2>
 
         <p className="mt-3 max-w-2xl text-sm leading-7 text-gray-400">
-          Review each suspect's statements and compare them with
-          the evidence collected during your investigation.
+          Review each suspect's statements and compare them with the evidence
+          collected during your investigation.
         </p>
       </div>
 
@@ -54,9 +70,7 @@ function SuspectEvidenceComparison({
         <select
           id="suspect-select"
           value={selectedSuspectId}
-          onChange={(event) =>
-            setSelectedSuspectId(Number(event.target.value))
-          }
+          onChange={(event) => setSelectedSuspectId(Number(event.target.value))}
           className="w-full max-w-md border border-white/20 bg-[#25262A] px-4 py-3 text-sm text-[#F5F1E8] outline-none focus:border-[#C49A52]"
         >
           {missingNecklaceSuspects.map((suspect) => (
@@ -71,11 +85,7 @@ function SuspectEvidenceComparison({
       <div className="grid gap-6 lg:grid-cols-2">
         <article className="border border-white/10 bg-[#1C1E23] p-6">
           <div className="flex items-center gap-4">
-            <Fingerprint
-              size={36}
-              className="text-[#C49A52]"
-              strokeWidth={1}
-            />
+            <Fingerprint size={36} className="text-[#C49A52]" strokeWidth={1} />
 
             <div>
               <p className="text-xs tracking-[3px] text-[#C49A52]">
@@ -86,9 +96,7 @@ function SuspectEvidenceComparison({
                 {selectedSuspect.name}
               </h3>
 
-              <p className="text-sm text-gray-500">
-                {selectedSuspect.role}
-              </p>
+              <p className="text-sm text-gray-500">{selectedSuspect.role}</p>
             </div>
           </div>
 
@@ -115,28 +123,25 @@ function SuspectEvidenceComparison({
           </div>
         </article>
 
-        {/* Discovered Evidence */}
+        {/* Suspect Evidence Analysis */}
         <article className="border border-white/10 bg-[#1C1E23] p-6">
           <div className="flex items-center gap-3 border-b border-white/10 pb-5">
             <FileSearch className="text-[#C49A52]" size={25} />
 
             <div>
               <h3 className="font-serif text-xl text-[#F5F1E8]">
-                Available Evidence
+                Evidence Analysis
               </h3>
 
               <p className="mt-1 text-xs text-gray-500">
-                {discoveredEvidence.length} clues collected
+                {suspectEvidence.length} clues reviewed
               </p>
             </div>
           </div>
 
-          {discoveredEvidence.length === 0 ? (
+          {suspectEvidence.length === 0 ? (
             <div className="py-8 text-center">
-              <Search
-                size={30}
-                className="mx-auto text-gray-600"
-              />
+              <Search size={30} className="mx-auto text-gray-600" />
 
               <p className="mt-4 text-sm text-gray-400">
                 No evidence discovered yet.
@@ -149,21 +154,35 @@ function SuspectEvidenceComparison({
             </div>
           ) : (
             <div className="mt-5 space-y-4">
-              {discoveredEvidence.map((clue) => (
+              {suspectEvidence.map((clue) => (
                 <div
                   key={clue.id}
-                  className="border-l-2 border-[#C49A52] bg-[#25262A] p-4"
+                  className="border border-white/10 bg-[#25262A] p-4"
                 >
-                  <p className="text-xs tracking-widest text-[#C49A52]">
-                    CLUE 0{clue.sequence}
-                  </p>
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-xs tracking-widest text-[#C49A52]">
+                      CLUE 0{clue.sequence}
+                    </p>
 
-                  <h4 className="mt-2 font-serif text-lg text-[#F5F1E8]">
+                    <span
+                      className={`text-[10px] font-semibold tracking-widest ${
+                        clue.analysis.type === "contradicting"
+                          ? "text-red-400"
+                          : clue.analysis.type === "supporting"
+                            ? "text-emerald-400"
+                            : "text-gray-400"
+                      }`}
+                    >
+                      {clue.analysis.type.toUpperCase()}
+                    </span>
+                  </div>
+
+                  <h4 className="mt-3 font-serif text-lg text-[#F5F1E8]">
                     {clue.title}
                   </h4>
 
                   <p className="mt-2 text-sm leading-6 text-gray-400">
-                    {clue.evidence}
+                    {clue.analysis.explanation}
                   </p>
                 </div>
               ))}
@@ -178,8 +197,8 @@ function SuspectEvidenceComparison({
           <span className="font-semibold text-[#C49A52]">
             Detective's Note:
           </span>{" "}
-          A possible motive does not prove guilt. Examine the evidence
-          carefully before drawing conclusions.
+          A possible motive does not prove guilt. Examine the evidence carefully
+          before drawing conclusions.
         </p>
       </div>
     </section>
