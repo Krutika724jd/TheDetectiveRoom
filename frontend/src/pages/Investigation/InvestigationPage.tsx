@@ -7,6 +7,15 @@ function InvestigationPage() {
   const [discoveredClues, setDiscoveredClues] = useState<number[]>([]);
   const [accusedSuspectId, setAccusedSuspectId] = useState<number | null>(null);
   const [isAccusationSubmitted, setIsAccusationSubmitted] = useState(false);
+  const [isVerdictRevealed, setIsVerdictRevealed] = useState(false);
+  const [reasoning, setReasoning] = useState("");
+  const handleReplayCase = () => {
+  setDiscoveredClues([]);
+  setAccusedSuspectId(null);
+  setIsAccusationSubmitted(false);
+  setIsVerdictRevealed(false);
+  setReasoning("");
+};
   return (
     <main className="min-h-screen bg-[#101114] text-[#F5F1E8]">
       {/* Top Navigation */}
@@ -132,6 +141,11 @@ function InvestigationPage() {
         isAccusationSubmitted={isAccusationSubmitted}
         setIsAccusationSubmitted={setIsAccusationSubmitted}
         discoveredClues={discoveredClues}
+        isVerdictRevealed={isVerdictRevealed}
+        setIsVerdictRevealed={setIsVerdictRevealed}
+        onReplayCase={handleReplayCase}
+        reasoning={reasoning}
+        setReasoning={setReasoning}
       />
     </main>
   );

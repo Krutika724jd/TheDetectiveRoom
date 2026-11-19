@@ -11,9 +11,11 @@ import { missingNecklaceSuspects } from "../../../data/cases/missingNecklace";
 import InvestigationResults from "./InvestigationResults";
 interface CaseVerdictProps {
   accusedSuspectId: number;
+  onReplayCase: () => void;
+  discoveredClues: number[];
 }
 
-function CaseVerdict({ accusedSuspectId, discoveredClues }: CaseVerdictProps) {
+function CaseVerdict({ accusedSuspectId, discoveredClues ,onReplayCase}: CaseVerdictProps) {
   const totalClues = missingNecklaceVerdict.explanation.length;
 
   const isCorrectAccusation =
@@ -196,6 +198,7 @@ function CaseVerdict({ accusedSuspectId, discoveredClues }: CaseVerdictProps) {
         discoveredClues={discoveredClues.length}
         totalClues={totalClues}
         isCorrectAccusation={isCorrectAccusation}
+         onReplayCase={onReplayCase}
       />
     </section>
   );

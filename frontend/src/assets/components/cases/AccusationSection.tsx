@@ -8,6 +8,11 @@ interface AccusationSectionProps {
   isAccusationSubmitted: boolean;
   setIsAccusationSubmitted: Dispatch<SetStateAction<boolean>>;
   discoveredClues: number[];
+  setIsVerdictRevealed: Dispatch<SetStateAction<boolean>>;
+  isVerdictRevealed: boolean;
+  onReplayCase: () => void;
+  reasoning: string;
+  setReasoning: Dispatch<SetStateAction<string>>;
 }
 function AccusationSection({
   accusedSuspectId,
@@ -15,9 +20,12 @@ function AccusationSection({
   isAccusationSubmitted,
   setIsAccusationSubmitted,
   discoveredClues,
+  isVerdictRevealed,
+  setIsVerdictRevealed,
+  onReplayCase,
+  reasoning,
+  setReasoning,
 }: AccusationSectionProps) {
-  const [reasoning, setReasoning] = useState("");
-  const [showVerdict, setShowVerdict] = useState(false);
   const selectedSuspect = missingNecklaceSuspects.find(
     (suspect) => suspect.id === accusedSuspectId,
   );
@@ -82,17 +90,18 @@ function AccusationSection({
 
           <button
             type="button"
-            onClick={() => setShowVerdict(true)}
+            onClick={() => setIsVerdictRevealed(true)}
             className="mt-7 flex items-center justify-center gap-3 bg-[#C49A52] px-7 py-4 text-xs font-bold tracking-widest text-[#101114] transition hover:bg-[#D6AD68]"
           >
             REVEAL CASE VERDICT
             <Fingerprint size={16} />
           </button>
 
-          {accusedSuspectId !== null && (
+          {isVerdictRevealed && accusedSuspectId !== null && (
             <CaseVerdict
               accusedSuspectId={accusedSuspectId}
               discoveredClues={discoveredClues}
+              onReplayCase={onReplayCase}
             />
           )}
         </div>
