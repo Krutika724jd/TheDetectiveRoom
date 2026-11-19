@@ -1,6 +1,8 @@
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { Fingerprint, Send, CheckCircle2 } from "lucide-react";
 import CaseVerdict from "./CaseVerdict";
+import { saveCaseResult } from "../../../utils/playerStorage";
+import { missingNecklaceVerdict } from "../../../data/cases/missingNecklaceVerdict";
 import { missingNecklaceSuspects } from "../../../data/cases/missingNecklace";
 interface AccusationSectionProps {
   accusedSuspectId: number | null;
@@ -39,6 +41,46 @@ function AccusationSection({
 
     setIsAccusationSubmitted(true);
   };
+
+const handleRevealVerdict = () => {
+  if (isVerdictRevealed || accusedSuspectId === null) {
+    return;
+  }
+
+  const totalClues = missingNecklaceVerdict.explanation.length;
+
+  const isCorrectAccusation =
+    accusedSuspectId === missingNecklaceVerdict.culpritId;
+
+  const totalScore =
+    (isCorrectAccusation ? 500 : 0) +
+    discoveredClues.length * 50 +
+    (discoveredClues.length === totalClues ? 250 : 0) +
+    100;
+
+  const detectiveRating =
+    totalScore >= 1000
+      ? "S"
+      : totalScore >= 800
+        ? "A"
+        : totalScore >= 600
+          ? "B"
+          : "C";
+
+  saveCaseResult({
+    caseId: "missing-necklace",
+    caseTitle: "The Missing Necklace",
+    score: totalScore,
+    rating: detectiveRating,
+    isCorrectAccusation,
+    discoveredClues: discoveredClues.length,
+    totalClues,
+    completedAt: new Date().toISOString(),
+  });
+
+  setIsVerdictRevealed(true);
+};
+
 
   return (
     <section className="mt-16 border-t border-white/10 px-6 pt-12">
@@ -90,7 +132,7 @@ function AccusationSection({
 
           <button
             type="button"
-            onClick={() => setIsVerdictRevealed(true)}
+            onClick={handleRevealVerdict}
             className="mt-7 flex items-center justify-center gap-3 bg-[#C49A52] px-7 py-4 text-xs font-bold tracking-widest text-[#101114] transition hover:bg-[#D6AD68]"
           >
             REVEAL CASE VERDICT

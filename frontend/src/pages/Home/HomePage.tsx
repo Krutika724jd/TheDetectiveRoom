@@ -1,10 +1,11 @@
-
 import { ArrowRight, FileText, Fingerprint, Play, Search } from "lucide-react";
 import FeaturedCases from "../../assets/components/cases/FeaturedCases";
 import Footer from "../../assets/components/layout/Footer";
 import HowToPlay from "../../common/HowToPlay";
+import { Link} from "react-router-dom";
 
 function HomePage() {
+
   return (
     <main className="min-h-screen bg-[#101114] text-[#F5F1E8]">
       {/* Navigation */}
@@ -35,6 +36,10 @@ function HomePage() {
             <a href="#how-to-play" className="transition hover:text-[#C49A52]">
               How to Play
             </a>
+
+            <Link to="/profile" className="transition hover:text-[#C49A52]">
+              Profile
+            </Link>
           </div>
 
           <button className="flex items-center gap-2 rounded border border-[#C49A52] px-4 py-2 text-sm text-[#C49A52] transition hover:bg-[#C49A52] hover:text-black">
@@ -129,7 +134,7 @@ function HomePage() {
 
       {/* How to Play */}
       <HowToPlay />
-      <Footer/>
+      <Footer />
     </main>
   );
 }
