@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { Search, CheckCircle2, FileSearch, BookOpen, X } from "lucide-react";
 import { missingNecklaceClues } from "../../../data/cases/missingNecklaceClues";
 import SuspectEvidenceComparison from "./SuspectEvidenceComparison";
-
-function ClueInvestigation() {
-  const [discoveredClues, setDiscoveredClues] = useState<number[]>([]);
+interface ClueInvestigationProps {
+  discoveredClues: number[];
+  setDiscoveredClues:Dispatch<SetStateAction<number | null>>;
+}
+function ClueInvestigation({discoveredClues,setDiscoveredClues}:ClueInvestigationProps) {
   const [isNotebookOpen, setIsNotebookOpen] = useState(false);
   const totalClues = missingNecklaceClues.length;
   const progress = (discoveredClues.length / totalClues) * 100;

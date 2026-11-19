@@ -1,4 +1,3 @@
-
 import {
   CheckCircle2,
   XCircle,
@@ -9,16 +8,44 @@ import {
 
 import { missingNecklaceVerdict } from "../../../data/cases/missingNecklaceVerdict";
 import { missingNecklaceSuspects } from "../../../data/cases/missingNecklace";
-
+import InvestigationResults from "./InvestigationResults";
 interface CaseVerdictProps {
   accusedSuspectId: number;
 }
 
-function CaseVerdict({ accusedSuspectId }: CaseVerdictProps) {
+function CaseVerdict({ accusedSuspectId, discoveredClues }: CaseVerdictProps) {
+  const totalClues = missingNecklaceVerdict.explanation.length;
+
+  const isCorrectAccusation =
+    accusedSuspectId === missingNecklaceVerdict.culpritId;
+
+  const cluePoints = discoveredClues.length * 50;
+
+  const correctAccusationPoints = isCorrectAccusation ? 500 : 0;
+
+  const completionBonus = discoveredClues.length === totalClues ? 250 : 0;
+
+  // CaseVerdict appears only after the player reveals the verdict.
+  const investigationCompletionPoints = 100;
+
+  const totalScore =
+    correctAccusationPoints +
+    cluePoints +
+    completionBonus +
+    investigationCompletionPoints;
+
+  const detectiveRating =
+    totalScore >= 1000
+      ? "S"
+      : totalScore >= 800
+        ? "A"
+        : totalScore >= 600
+          ? "B"
+          : "C";
   const verdict = missingNecklaceVerdict;
 
   const culprit = missingNecklaceSuspects.find(
-    (suspect) => suspect.id === verdict.culpritId
+    (suspect) => suspect.id === verdict.culpritId,
   );
 
   const isCorrect = accusedSuspectId === verdict.culpritId;
@@ -38,23 +65,17 @@ function CaseVerdict({ accusedSuspectId }: CaseVerdictProps) {
         </h2>
 
         <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-gray-400">
-          Every investigation has an answer. Discover what really
-          happened to Priya's missing diamond necklace.
+          Every investigation has an answer. Discover what really happened to
+          Priya's missing diamond necklace.
         </p>
       </div>
 
       {/* Player Result */}
       <div className="mt-10 border border-white/10 bg-[#25262A] p-6 text-center">
         {isCorrect ? (
-          <CheckCircle2
-            size={42}
-            className="mx-auto text-emerald-400"
-          />
+          <CheckCircle2 size={42} className="mx-auto text-emerald-400" />
         ) : (
-          <XCircle
-            size={42}
-            className="mx-auto text-red-400"
-          />
+          <XCircle size={42} className="mx-auto text-red-400" />
         )}
 
         <h3 className="mt-4 font-serif text-2xl text-[#F5F1E8]">
@@ -84,9 +105,7 @@ function CaseVerdict({ accusedSuspectId }: CaseVerdictProps) {
           {culprit.name}
         </h3>
 
-        <p className="mt-2 text-sm text-gray-500">
-          {culprit.role}
-        </p>
+        <p className="mt-2 text-sm text-gray-500">{culprit.role}</p>
 
         <p className="mx-auto mt-5 max-w-xl text-sm leading-7 text-gray-400">
           {verdict.summary}
@@ -99,9 +118,7 @@ function CaseVerdict({ accusedSuspectId }: CaseVerdictProps) {
           <div className="flex items-center gap-3">
             <Fingerprint size={22} className="text-[#C49A52]" />
 
-            <h4 className="font-serif text-xl text-[#F5F1E8]">
-              The Motive
-            </h4>
+            <h4 className="font-serif text-xl text-[#F5F1E8]">The Motive</h4>
           </div>
 
           <p className="mt-4 text-sm leading-7 text-gray-400">
@@ -168,12 +185,18 @@ function CaseVerdict({ accusedSuspectId }: CaseVerdictProps) {
           <span className="font-semibold text-[#C49A52]">
             Final Detective's Note:
           </span>{" "}
-          The evidence raises serious questions about Vikram's
-          alibi and places him near the guest bedroom. However,
-          the clues are circumstantial rather than direct proof
-          of the theft.
+          The evidence raises serious questions about Vikram's alibi and places
+          him near the guest bedroom. However, the clues are circumstantial
+          rather than direct proof of the theft.
         </p>
       </div>
+      <InvestigationResults
+        totalScore={totalScore}
+        detectiveRating={detectiveRating}
+        discoveredClues={discoveredClues.length}
+        totalClues={totalClues}
+        isCorrectAccusation={isCorrectAccusation}
+      />
     </section>
   );
 }

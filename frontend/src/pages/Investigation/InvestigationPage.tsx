@@ -2,7 +2,11 @@ import { ArrowLeft, FileText, Clock, Search, LockKeyhole } from "lucide-react";
 import SuspectsSection from "../../assets/components/cases/SuspectsSection";
 import ClueInvestigation from "../../assets/components/cases/ClueInvestigation";
 import AccusationSection from "../../assets/components/cases/AccusationSection";
+import { useState } from "react";
 function InvestigationPage() {
+  const [discoveredClues, setDiscoveredClues] = useState<number[]>([]);
+  const [accusedSuspectId, setAccusedSuspectId] = useState<number | null>(null);
+  const [isAccusationSubmitted, setIsAccusationSubmitted] = useState(false);
   return (
     <main className="min-h-screen bg-[#101114] text-[#F5F1E8]">
       {/* Top Navigation */}
@@ -116,8 +120,19 @@ function InvestigationPage() {
         </div>
       </section>
       <SuspectsSection />
-      <ClueInvestigation />
-      <AccusationSection/>
+
+      <ClueInvestigation
+        discoveredClues={discoveredClues}
+        setDiscoveredClues={setDiscoveredClues}
+      />
+
+      <AccusationSection
+        accusedSuspectId={accusedSuspectId}
+        setAccusedSuspectId={setAccusedSuspectId}
+        isAccusationSubmitted={isAccusationSubmitted}
+        setIsAccusationSubmitted={setIsAccusationSubmitted}
+        discoveredClues={discoveredClues}
+      />
     </main>
   );
 }

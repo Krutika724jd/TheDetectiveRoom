@@ -1,25 +1,35 @@
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { Fingerprint, Send, CheckCircle2 } from "lucide-react";
 import CaseVerdict from "./CaseVerdict";
 import { missingNecklaceSuspects } from "../../../data/cases/missingNecklace";
-
-function AccusationSection() {
-  const [selectedSuspectId, setSelectedSuspectId] = useState("");
+interface AccusationSectionProps {
+  accusedSuspectId: number | null;
+  setAccusedSuspectId: Dispatch<SetStateAction<number | null>>;
+  isAccusationSubmitted: boolean;
+  setIsAccusationSubmitted: Dispatch<SetStateAction<boolean>>;
+  discoveredClues: number[];
+}
+function AccusationSection({
+  accusedSuspectId,
+  setAccusedSuspectId,
+  isAccusationSubmitted,
+  setIsAccusationSubmitted,
+  discoveredClues,
+}: AccusationSectionProps) {
   const [reasoning, setReasoning] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [showVerdict, setShowVerdict] = useState(false);
   const selectedSuspect = missingNecklaceSuspects.find(
-    (suspect) => suspect.id === Number(selectedSuspectId),
+    (suspect) => suspect.id === accusedSuspectId,
   );
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!selectedSuspectId || !reasoning.trim()) {
+    if (!selectedSuspect || !reasoning.trim()) {
       return;
     }
 
-    setIsSubmitted(true);
+    setIsAccusationSubmitted(true);
   };
 
   return (
@@ -39,7 +49,7 @@ function AccusationSection() {
         </p>
       </div>
 
-      {isSubmitted ? (
+      {isAccusationSubmitted ? (
         <div className="border border-[#C49A52]/30 bg-[#1C1E23] p-8">
           <CheckCircle2 size={40} className="text-[#C49A52]" />
 
@@ -79,8 +89,11 @@ function AccusationSection() {
             <Fingerprint size={16} />
           </button>
 
-          {showVerdict && (
-            <CaseVerdict accusedSuspectId={Number(selectedSuspectId)} />
+          {accusedSuspectId !== null && (
+            <CaseVerdict
+              accusedSuspectId={accusedSuspectId}
+              discoveredClues={discoveredClues}
+            />
           )}
         </div>
       ) : (
@@ -101,8 +114,12 @@ function AccusationSection() {
 
               <select
                 id="accused-suspect"
-                value={selectedSuspectId}
-                onChange={(event) => setSelectedSuspectId(event.target.value)}
+                value={accusedSuspectId?.toString() ?? ""}
+                onChange={(e) =>
+                  setAccusedSuspectId(
+                    e.target.value ? Number(e.target.value) : null,
+                  )
+                }
                 required
                 className="w-full bg-transparent py-4 text-sm text-[#F5F1E8] outline-none"
               >
