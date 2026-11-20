@@ -15,4 +15,8 @@ export interface PlayerProfile {
   completedCases: number;
   bestRating: string;
   caseHistory: CaseHistory[];
+  achievements: {
+    achievementId: string;
+    unlockedAt: string;
+  }[];
 }

@@ -1,5 +1,5 @@
 import type { CaseHistory, PlayerProfile } from "../types/player";
-
+import { getNewAchievements } from "./achievementUtils";
 const PLAYER_STORAGE_KEY = "detective-room-player";
 
 const defaultPlayer: PlayerProfile = {
@@ -8,6 +8,7 @@ const defaultPlayer: PlayerProfile = {
   completedCases: 0,
   bestRating: "C",
   caseHistory: [],
+  achievements: [],
 };
 
 export const getPlayerProfile = (): PlayerProfile => {
@@ -18,7 +19,13 @@ export const getPlayerProfile = (): PlayerProfile => {
   }
 
   try {
-    return JSON.parse(storedProfile) as PlayerProfile;
+    const parsedProfile = JSON.parse(storedProfile) as Partial<PlayerProfile>;
+
+    return {
+      ...defaultPlayer,
+      ...parsedProfile,
+      achievements: parsedProfile.achievements ?? [],
+    };
   } catch {
     return defaultPlayer;
   }
@@ -46,6 +53,20 @@ export const saveCaseResult = (caseResult: CaseHistory): void => {
         : profile.bestRating,
     caseHistory: [...profile.caseHistory, caseResult],
   };
+  const newAchievements = getNewAchievements(
+    updatedProfile.completedCases,
+    caseResult.discoveredClues,
+    caseResult.totalClues,
+    caseResult.isCorrectAccusation,
+    profile.achievements?.map((item) => item.achievementId),
+  );
 
+  updatedProfile.achievements = [
+    ...profile.achievements,
+    ...newAchievements.map((achievement) => ({
+      achievementId: achievement.id,
+      unlockedAt: new Date().toISOString(),
+    })),
+  ];
   savePlayerProfile(updatedProfile);
 };
